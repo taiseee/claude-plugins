@@ -1,0 +1,9 @@
+{
+  "name": "rewrite-final",
+  "version": "0.2.0",
+  "description": "Rewrites <!--final--> answers with the bundled rewrite-agent before they are stored, and ships the rules that tell Claude when to use it",
+  "author": { "name": "taiseee", "url": "https://github.com/taiseee" },
+  "repository": "https://github.com/taiseee/claude-plugins",
+  "license": "MIT",
+  "keywords": ["mod", "function-hooks", "rewrite", "japanese"]
+}

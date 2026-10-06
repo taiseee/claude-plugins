@@ -1,0 +1,12 @@
+{
+  "name": "taisei-plugins",
+  "owner": { "name": "taiseee", "url": "https://github.com/taiseee" },
+  "description": "Claude Code plugins by taiseee",
+  "plugins": [
+    {
+      "name": "rewrite-final",
+      "source": "./plugins/rewrite-final",
+      "description": "最終回答と書き込む文章を rewrite-agent で読みやすく書き直す"
+    }
+  ]
+}
