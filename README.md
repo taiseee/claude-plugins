@@ -19,7 +19,8 @@ Claude の最終回答が保存される直前に、別の LLM（Command Code �
 ### 必要なもの
 
 - mod に対応した Claude Code
-- Python 3
+- `python3` コマンドで起動できる Python 3（Windows の場合は PowerShell で `python3 --version` を実行して確認してください。バージョンが表示されない場合は、Microsoft Store 版の Python をインストールします）
+- Git for Windows（Windows の場合。Claude Code の Bash ツールが Git Bash を使用するため）
 - [Command Code](https://commandcode.ai) の API キー（環境変数 `CMD_API_KEY` に設定するか、`commandcode login` を実行して `~/.commandcode/auth.json` を作成しておきます）
 
 ### インストール

@@ -2,8 +2,6 @@ import type { Register } from 'claude-code'
 
 // Claudeが最終回答の1行目に記載する目印
 const MARK = '<!--final-->'
-// `claude -p`（sdk-cli）では目印を外す処理のみを行い、それ以外の場合は rewrite-agent で書き直します。
-const SCRIPT = '[ "$CLAUDE_CODE_ENTRYPOINT" = sdk-cli ] && exit 3; exec "$0"'
 
 const isMarked = (text: string) => text.trimStart().startsWith(MARK)
 
@@ -16,9 +14,11 @@ export const register: Register = on => {
     const src = block.text.trimStart().slice(MARK.length).replace(/^\n+/, '')
     let text = src
     try {
-      const agent = `${$.plugin.root}/bin/rewrite-agent`
-      const r = await $.process.run(['/bin/sh', '-c', SCRIPT, agent], { stdin: src, timeoutMs: 100_000 })
-      if (r.exitCode === 0 && r.stdout.trim()) text = r.stdout.replace(/\n+$/, '')
+      // `claude -p`（sdk-cli）では、目印を外す処理のみを行います。また、/bin/sh が存在しない Windows 環境でも動作するよう、シェルを経由せずに python3 から直接起動します。
+      if ((await $.env.get('CLAUDE_CODE_ENTRYPOINT')) !== 'sdk-cli') {
+        const r = await $.process.run(['python3', `${$.plugin.root}/bin/rewrite-agent`], { stdin: src, timeoutMs: 100_000 })
+        if (r.exitCode === 0 && r.stdout.trim()) text = r.stdout.replace(/\n+$/, '')
+      }
     } catch {} // 失敗やタイムアウトが発生した場合は、目印を外した状態の原文を残します。
     const content = e.message.content.map((b, j) => (j === i ? { ...block, text } : b))
     return next({ ...e, message: { ...e.message, content } })
